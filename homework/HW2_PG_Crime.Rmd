@@ -38,11 +38,7 @@ Calculate the total number of incidents per month for each category using `mutat
 ```{r}
 
 pg_crime <- pg_crime %>%
-  rowwise() %>%
-  mutate(
-    total = sum(c_across(Jan:Dec), na.rm = TRUE),   # Sum up monthly data
-    average = mean(c_across(Jan:Dec), na.rm = TRUE) # Calculate average
-  )
+mutate(total = sum(c_across(Jan:Dec), na.rm = TRUE), average = mean(c_across(Jan:Dec), na.rm = TRUE))
 
 ```
 
@@ -61,11 +57,7 @@ One theory about crime is that it is more likely to occur in the summer months. 
 ```{r}
 
 pg_crime <- pg_crime %>%
-  mutate(
-    june_change = ((Jun - average) / average) * 100,
-    july_change = ((Jul - average) / average) * 100,
-    august_change = ((Aug - average) / average) * 100
-  )
+mutate(june_change = ((Jun - average) / average) * 100, july_change = ((Jul - average) / average) * 100, august_change = ((Aug - average) / average) * 100)
 
 ```
 
