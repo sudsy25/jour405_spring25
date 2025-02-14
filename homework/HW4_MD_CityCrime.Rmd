@@ -9,6 +9,8 @@ In this assignment, we will be working with a dataset of total crimes reported b
 You will need to load the tidyverse library and the janitor library
 
 ```{r}
+library(tidyverse)
+library(janitor)
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_cities_crime_2019_2020.csv. You will create a dataframe called `md_cities` that contains the data from this URL.
@@ -16,12 +18,19 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data
 
 ```{r}
+md_cities <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_cities_crime_2019_2020.csv")
 ```
 ### Task 3: Calculating Rates
 
 Calculate violent and property crime rates for each city for both years using `mutate()`. You'll create four new columns: `violent_rate_2019`, `property_rate_2019`, `violent_rate_2020`, and `property_rate_2020`. You'll need to figure out the proper unit rate, given that there are varying populations. There's no perfect choice; choose the one that works best for you. Save the results to a new dataframe called `md_cities_rates`.
 
 ```{r}
+md_cities_rates <- md_cities %>%
+  mutate(
+    violent_rate_2019 = (violent2019 / pop2019) * 100000,
+    property_rate_2019 = (property2019 / pop2019) * 100000,
+    violent_rate_2020 = (violent2020 / pop2020) * 100000,
+    property_rate_2020 = (property2020 / pop2020) * 100000)
 ```
 
 ### Task 4: Describe the Rates
@@ -30,12 +39,17 @@ Examine the new dataframe, `md_cities_rates`, by clicking on it in the Environme
 
 ANSWER HERE
 
+Ocean City and Baltimore City swap top spots for violent crime rates in 2019 and 2020, but Ocean City remains up top for property crime rates in both years. Property crimes in PG County jumped from 2019-2020, with Colmar Manor and Landover Hills jumping into the top 3.
 
 ### Task 5: Calculate Percentage Change
 
 Let's add two percentage change columns to your dataframe: one for violent crime rates and one for property crime rates. You'll calculate the percentage change between 2019 and 2020 for each city. Save the results to a new dataframe called `md_cities_change`.
 
 ```{r}
+md_cities_change <- md_cities_rates %>%
+  mutate(
+    violent_change = ((violent_rate_2020 - violent_rate_2019) / violent_rate_2019) * 100,
+    property_change = ((property_rate_2020 - property_rate_2019) / property_rate_2019) * 100)
 ```
 
 ### Task 7: Describe Percentage Changes
@@ -44,11 +58,17 @@ Look at the `md_cities_change` dataframe by clicking on it in the Environment ta
 
 ANSWER HERE
 
+Edmonston had the greatest violent change with a 900% increase.  Frederick had great overall change dropping 95% in violent crimes and 90% in property crimes. I think the outliers are interesting, but some of the "inf" changes may come from a small city going from 0 to 2 crimes.
+
 ### Task 8: Tell the Best Story
 
 Write up a lede and nutgraf of a story with the _best_ story idea you've found in this assignment. The lede should be a single sentence that summarizes the most important information in the data. The nutgraf should be a paragraph that provides more context and explains why the data is important.
 
 ANSWER HERE
+
+Ocean City ranked among the highest violent and property crime rates in Maryland for both 2019 and 2020, while Frederick County saw a dramatic decrease of over 90% in both categories, according to newly released crime data.
+
+Crime data from Maryland cities reveals that Ocean City consistently ranked highest in both violent and property crime rates over the two-year period, with Baltimore City being the only close competitor. The popular beach town’s crime rate remained significantly high, potentially due to large number of tourists, nightlife, and law enforcement priorities. Meanwhile, Frederick County recorded a remarkable drop in crime, with both violent and property crime rates dropping by over 90% between 2019 and 2020. This contrast could have a multitude of reasons behind it, including policies, community engagement, and external factors such as the COVID-19 pandemic on crime trends across Maryland.
 
 ### Task 9: Save Your Work and Put it on GitHub
 
