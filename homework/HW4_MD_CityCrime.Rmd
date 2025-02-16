@@ -73,3 +73,17 @@ Crime data from Maryland cities reveals that Ocean City consistently ranked high
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10:
+
+```{r}
+md_cities_percentiles <- md_cities_rates %>%
+  mutate(percentile = ntile(violent_rate_2020, 100))
+```
+
+```{r}
+iqr_values <- md_cities_rates %>%
+  summarize(IQR = IQR(violent_rate_2020))
+```
+
+Ocean City still remains at the top, with other cities not too far behing in the percentile range. This new data does not change my best story idea, as the contrast between Ocean City’s crime issues and Frederick’s decline remains the most newsworthy aspect.
