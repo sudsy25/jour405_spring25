@@ -5,26 +5,47 @@ title: "Car Thefts"
 Follow along with the demo to learn how to calculate standard deviation and how to create a histogram of the data using R and the Tidyverse. Get started by loading the tidyverse in a new R block.
 
 ### Task 1: Load the tidyverse
+
+```{r}
 library(tidyverse)
+```
 
 ### Task 2: Load the car thefts dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/car_thefts_jan24.csv
-data_url <- "https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/car_thefts_jan24.csv"
-car_thefts <- read_csv(data_url)
 
+```{r}
+car_thefts <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/car_thefts_jan24.csv")
+```
 
 ### Task 3: Calculate the standard deviation of the number of car thefts, along with the mean
 
+```{r}
+mean_thefts <- mean(car_thefts$count)
+sd_thefts <- sd(car_thefts$count)
+```
 
 ### Task 4: Create a histogram of the number of car thefts
+
+```{r}
+ggplot(car_thefts, aes(x = count)) + 
+  geom_histogram(binwidth = 1, fill = "lightblue", color = "black") +
+  labs(title = "Number of Car Thefts", x = "Car Thefts per Day", y = "Frequency")
+```
 
 
 ### Task 5: Add a line to the histogram that shows the mean of the number of car thefts
 
+```{r}
+ggplot(car_thefts, aes(x = count)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "lightblue") +
+  geom_vline(aes(xintercept = mean_thefts), color = "red", linetype = "dashed", size = 1) +
+  labs(title = "Number of car thefts with mean", x = "Number of Car Thefts", y = "Frequency")
+```
 
 ### Task 6: Describe your results
 
 Is the distribution normal or skewed in one direction? Write a sentence in which you describe the range of the data covered by one standard deviation from the mean on both sides.
 
-
+The distribution appears to be negatively skewed, since the tail is to the left and the lower numbers are less frequent. The median is likely greater than the mean. The mean number of car thefts per day is 12.68, and the standard deviation is 4.28.
+According to the 68% rule, most daily theft counts fall between (12.68 - 4.28) = 8.40 and (12.68 + 4.28) = 16.96 thefts per day. This suggests that on most days, theft counts were between 8 and 17 cars stolen.  The lower theft days pull the average down.
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
