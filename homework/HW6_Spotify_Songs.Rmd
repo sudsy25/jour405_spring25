@@ -7,18 +7,22 @@ In this assignment, you will be working with a dataset of songs played on Spotif
 ### Task 1: Load the tidyverse
 
 ```{r}
+library(tidyverse)
 ```
 
 ### Task 2: Load the Spotify Songs dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/spotify_2020.csv
 
 ```{r}
+spotify_songs <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/spotify_2020.csv")
 ```
 
 ### Task 3: Calculate the mean and standard deviation of the danceability scores
 
-Write code to calculate the mean standard deviation of the danceability scores in the Spotify dataset. Display those.
+Write code to calculate the mean and standard deviation of the danceability scores in the Spotify dataset. Display those.
 
 ```{r}
+mean_danceability <- mean(spotify_songs$danceability)
+sd_danceability <- sd(spotify_songs$danceability)
 ```
 
 ### Task 4: Create a histogram of the danceability scores
@@ -26,20 +30,52 @@ Write code to calculate the mean standard deviation of the danceability scores i
 Write code to create a histogram of the danceability scores in the Spotify dataset, based on the example we did in class.
 
 ```{r}
+ggplot(spotify_songs, aes(x = danceability)) +
+  geom_histogram(binwidth = 0.05, fill = "red", color = "black") +
+  labs(title = "Histogram of Danceability Scores",
+       x = "Danceability Score",
+       y = "Frequency")
 ```
 
 ### Task 5: Add a line to the histogram for the mean danceability score
 
-Write code to add a vertical line to the histogram for the mean danceability score, based on the example in class.
+Take the same code and add a vertical line to the histogram for the mean danceability score, based on the example in class.
 
 ```{r}
+ggplot(spotify_songs, aes(x = danceability)) +
+  geom_histogram(binwidth = 0.05, fill = "red", color = "black") +
+  geom_vline(xintercept = mean_danceability, color = "lightblue", linetype = "dashed", linewidth = 1) +
+  labs(title = "Danceability Scores with Mean",
+       x = "Danceability Score",
+       y = "Frequency")
 ```
 
-### Task 6: Describe our results
 
-Write a few sentences about the distribution of danceability scores in the Spotify dataset. Is it a normal distribution, or is it skewed in one direction? What does the mean and distribution tell us about the songs in the dataset?
+### Task 6: Add two lines to the histogram to show one standard deviation
 
-### Task 7: Save Your Work and Put it on GitHub
+Take the previous code and add two lines to the histogram for the 1st standard deviation below and above the mean score.
+
+```{r}
+ggplot(spotify_songs, aes(x = danceability)) +
+  geom_histogram(binwidth = 0.05, fill = "red", color = "black") +
+  geom_vline(xintercept = mean_danceability, color = "lightblue", linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = mean_danceability + sd_danceability, color = "blue", linetype = "dotted", linewidth = 1) +
+  geom_vline(xintercept = mean_danceability - sd_danceability, color = "blue", linetype = "dotted", linewidth = 1) +
+  labs(title = "Danceability Scores with Mean and Standard Deviation",
+       x = "Danceability Score",
+       y = "Frequency")
+```
+
+### Task 7: Describe our results and pitch a story
+
+Write a few sentences about the distribution of danceability scores in the Spotify dataset. Is it a normal distribution, or is it skewed in one direction? What does the mean and one standard distribution tell us about the songs in the dataset? Draft a short story pitch from this data.
+
+The danceability is positively skewed, so a majority of the songs are danceable (.6 to .8 range).
+
+How danceable is your favorite song according to Spotify's trends?
+
+In 2020, Spotify listeners leaned towards songs that are more danceable. Most tracks scored above the .6 mark (on a scale of 0 to 1), with average being around .67.  After analyzing thousands of songs, the data seemed positively skewed, with most tracks being catered to be mostly danceable.
+
+### Task 8: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
-
