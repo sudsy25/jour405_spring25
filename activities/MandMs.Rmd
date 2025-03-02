@@ -1,5 +1,59 @@
 ---
-title: "MandMs"
+title: "HW7_MandMs"
 ---
 
+In this assignment, you'll be picking up where you left off with the M&Ms activity. You'll load the data and perform some basic statistical analysis. Follow the steps below to complete the assignment.
 
+### Task 1: Load the tidyverse
+```{r}
+library(tidyverse)
+```
+
+
+### Task 2: Load the M&Ms dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv
+```{r}
+mandms <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv")
+```
+
+
+### Task 3: Sample 5 rows of data from the dataset, and then sample 10 rows, saving each to separate dataframes called sample5 and sample10.
+```{r}
+set.seed(123)
+sample5 <- sample_n(mandms, 5)
+sample10 <- sample_n(mandms, 10)
+```
+
+
+### Task 4: Calculate the mean and standard deviation of the samples, using one of the colors.
+```{r}
+sample5_mean <- mean(sample5$red)
+sample5_sd <- sd(sample5$red)
+sample10_mean <- mean(sample10$red)
+sample10_sd <- sd(sample10$red)
+```
+
+
+### Task 5: Calculate the mean and standard deviation of the population, using the same color as Task 4
+```{r}
+pop_mean <- mean(mandms$red)
+pop_sd <- sd(mandms$red)
+```
+
+
+### Task 6: Compare the sample and population statistics
+
+Compare the three sets of means and standard deviations. Are they similar?
+
+The n=10 mean is closer to the population mean than n=5, meaning a larger sample size provides a better estimate of the true population value.
+
+Similarly, the standard deviation changes a lot. n=5 has the lowest standard deviation, indicating less variability, while n=10 has a higher standard deviation. Small samples may not fully capture the diversity of the data.
+
+
+
+### Task 7: Describe the results
+
+Write a few sentences about what you found in the data. What does this tell you about the M&Ms dataset and about the act of random sampling?
+
+The results show that larger samples give a better estimate of the actual number of m&ms in the population. The small sample of 5 had a much higher average than the full dataset, while the sample of 10 was closer to the real mean. This proves that the more data you collect, the more accurate your results will be.
+
+When finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
