@@ -1,7 +1,7 @@
 # JOUR405: Statistics for Journalists
 ## Midterm Exam - Spring 2025
 
-Name: YOUR NAME HERE
+Name: Andrew Diveley
 
 For this exam, you'll analyze several datasets using R and the statistical concepts we've covered in class. Load the tidyverse before beginning, then complete each task. Write your code in the provided blocks and answer the questions in complete sentences. Start by loading the tidyverse and any other libraries you think you might need.
 
@@ -18,9 +18,24 @@ You want to understand how restaurants in Montgomery County are performing on he
 3. Write 2-3 sentences interpreting what the standard deviation and histogram tell us about the distribution of compliance scores. What would be newsworthy about this distribution? What's the story here? (5 points).
 
 ```{r}
+library(tidyverse)
+data <-read.csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/montco_inspections.csv")
 
+data_mean <- mean(data$compliance_score)
+data_sd <- sd(data$compliance_score)
 
+ggplot(data, aes(x = compliance_score)) +
+  geom_histogram(binwidth = 0.5, fill = "red", color = "black") +
+  geom_vline(xintercept = data_mean, color = "lightblue", linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = data_mean + data_sd, color = "blue", linetype = "dotted", linewidth = 1) +
+  geom_vline(xintercept = data_mean - data_sd, color = "blue", linetype = "dotted", linewidth = 1) +
+  labs(title = "Compliance Scores with Mean and Standard Deviation",
+       x = "Compliance Score",
+       y = "Frequency")
 ```
+
+
+The Distribution shows us that most people scored over 90%, with the standard deviation maxing out at 100% on the compliance score.  The data is very positively skewed.  If I were to write a story, I would single out the 4 stores that scored an F and possibly made comparisons to A-tier inspections.
 
 ## Part 2: High School Athletics (25 points)
 
@@ -33,9 +48,24 @@ You are reporting a story about high school sports participation in Maryland and
 4. In 2-3 sentences, explain what the correlation coefficient and scatterplot reveal about equity in Maryland high school sports participation. How do you interpret the school districts that are below the line vs those that are above? Which school districts are most worth examining further, and why? (10 points)
 
 ```{r}
+library(tidyverse)
+gender_data <-read.csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_hs_participation.csv")
 
+correlation <- cor(gender_data$boys, gender_data$girls)
+
+gender_data <- gender_data %>%
+  mutate(
+    total = (boys + girls),
+    girls_pct = (girls / total))
+
+ggplot(gender_data, aes(x = total, y = girls_pct)) +
+  geom_point() +
+  labs(title = "girls vs. total",
+       x = "total",
+       y = "girls_pct")
 ```
 
+The correlation coefficient of boys and girls if .982, meaning they have a strong positive relationsip, so there really was around the same amount of each gender in the study.  The scatterplot tells us that most schools hover around 40% to 60% of girls in sports (meaning there is high equity), but there are some notable dots.  The most obvious dots are Montgomery County (highest total but still has great gender diversity in sports), Baltimore County (middle total but has highest percentage of girls at 72%), and Somerset(low total and lowest girl percentage).
 
 ## Part 3: Public Transit Ridership (20 points)
 
@@ -48,10 +78,23 @@ You are investigating public transit ridership in the Washington, D.C. area and 
 
 
 ```{r}
+library(tidyverse)
+ridership_data <-read.csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/wmata_daily.csv")
+
+ridership_data %>%
+  summarize(
+    mean_total = mean(total),
+    ridership_sd = sd(total))
+
+set.seed(123)
+sample10 <- sample_n(ridership_data, 10) ### There was a lot of data, so 5 felt like too little,
+
+sample10_mean <- mean(sample10$total)
+sample10_sd <- sd(sample10$total)
 
 ```
 
-
+Some holidays have low ridership (Christmas and New Years), while some have high ridership (Halloween).  Another important thing to note is how Tues and Wed dominate high ridership days, while the weekend days tend to represent low ridership days.  This could most likely be because of work. On low ridership days, bus tends to be higher than rail, and on higher days, rail tends to be higher than bus.
 
 ## Part 4: Maryland Car Theft Rates (20 points)
 
@@ -64,8 +107,19 @@ Your editor has assigned you a story about car thefts in Maryland and wants you 
 
 
 ```{r}
+library(tidyverse)
+thefts <-read.csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_car_thefts.csv")
+
+thefts <- thefts %>%
+mutate(total_crime_rate = (X2023 / population) * 10000)
+
+rate_median <- median(thefts$total_crime_rate)
 
 ```
+
+There are 12 counties over the median, with Baltimore City easily leading the pack.  The distribution heavily lies on counties like Baltimore City and Prince George's County, because they are high population and high percentage.  The median is less than 1 person per 1000, and Baltimore City soars to 1 in 100, 10 times the median.  That would influence my lede:
+
+"Baltimore City averages 10 times the median rate of car thefts" and then have a story about how they have changed over the years and what measures are being taken to prevent this.
 
 ## Part 5: Data Analysis Scenario (20 points)
 
@@ -73,9 +127,16 @@ You receive a tip that local emergency response times have gotten significantly 
 
 Write 3-4 sentences (no code!) explaining:
 1. What statistical measures would you calculate to verify this claim? (10 points)
+
+I would most likely look at the mean response time and calculate the standard deviation of them all.
+
 2. What visualizations would help readers understand the trends? (5 points)
+
+I think people would like to look at a scatterplot of response time vs distance from police/fire department.  Or people could use a histogram of the average response time with the mean and standard deviation.
+
 3. What additional context or data would you need to make this a complete story? (5 points)
 
+There are so many factors, such as the emergency type, the distance from police/fire or whatever department, the amount of response needed (any ambulance needed, how many fire trucks and how many cop cars?).  There are so many variables.  I would like to use previous data as well, I can't just claim reponse times are going down.
 
 ### Submission Instructions
 - Save your work frequently
