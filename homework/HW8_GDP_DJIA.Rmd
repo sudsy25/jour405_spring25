@@ -52,3 +52,7 @@ The correlation was .953 which indicates a strong positive relationship.  This m
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
 
+You'll add a label for the months using geom_text(). That works much like geom_point() does, including the same aes() inside, with one addition: instead of aes(x=temperature, y=murders) alone, you'll add another comma and label=month inside the aes(). Remember to connect each line in a ggplot() chart with the + sign at the end (except the last line).
+
+The correlation coefficient expresses the direction and strength of the relationship between two variables, on a scale from -1 to 1, with -1 being a perfect negative relationship, 1 being a perfect positive relationship, and 0 being no relationship at all.
+
