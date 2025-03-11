@@ -5,8 +5,10 @@ Name: Andrew Diveley
 
 For this exam, you'll analyze several datasets using R and the statistical concepts we've covered in class. Load the tidyverse before beginning, then complete each task. Write your code in the provided blocks and answer the questions in complete sentences. Start by loading the tidyverse and any other libraries you think you might need.
 
-```r
+```{r}
+library(tidyverse)
 ```
+
 
 ## Part 1: Restaurant Health Inspections (15 points)
 
