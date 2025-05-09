@@ -1,6 +1,6 @@
 ---
 title: "Multiple Regression Analysis: Maryland Voter Turnout"
-name: "YOUR NAME HERE"
+name: "Andrew Diveley"
 ---
 
 # Introduction
@@ -9,7 +9,8 @@ Multiple regression analysis is a statistical method used to understand the rela
 
 ```{r setup}
 library(tidyverse)
-#install.packages('corrplot')
+install.packages('corrplot')
+
 library(corrplot)
 ```
 
@@ -28,6 +29,7 @@ Before building our model, let's explore the data to understand the variables an
 
 ANSWER HERE
 
+Income, pct_bachelors_higher, median age and pct_white have positive relationships with voter turnout. Unemployment and population show negative trends. Population is the least correlated.
 
 ```{r}
 # Summary statistics
@@ -91,6 +93,8 @@ Examine the output of the model, checking the coefficients, residuals, and overa
 
 ANSWER HERE
 
+The model explains about 67% of the variation in turnout, which makes it decently strong. Unemployment has a strong negative effect and is statistically significant. Median age and pct_white are also significant and positively related to turnout. Population and income are not significant in this model. Overall, the model is useful but could be improved by removing weaker predictors.
+
 ```{r}
 # Build initial model with all predictors
 initial_model <- lm(turnout ~ population + income + pct_bachelors_higher + 
@@ -105,17 +109,19 @@ Create three alternative models by adding or removing variables to see if we can
 
 ANSWER HERE
 
+The full model explains turnout the best. Model 2 is almost as good but uses fewer variables, so it’s simpler and still strong. Model 3 is okay, and Model 4 is the weakest. None of the new models beat the full one, but Model 2 is a good backup. It shows we don’t need every variable to make a useful model.
+
 ```{r}
 # Model 2
-model2 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model2 <- lm(turnout ~ pct_bachelors_higher + pct_unemployed + median_age + pct_white, data = md_turnout)
 summary(model2)
 
 # Model 3
-model3 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model3 <- lm(turnout ~ pct_unemployed + median_age + pct_white, data = md_turnout)
 summary(model3)
 
 # Model 4
-model4 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model4 <- lm(turnout ~ income + pct_unemployed + pct_bachelors_higher, data = md_turnout)
 summary(model4)
 
 # Compare models
@@ -145,3 +151,5 @@ ggplot(model_comparison, aes(x = reorder(Model, Adjusted_R_squared), y = Adjuste
 Without using the words "multiple regression model", describe how you could use this analysis to cover an election or voter participation story.
 
 ANSWER HERE
+
+This analysis shows what factors might affect how much people vote in different counties. It can help tell stories about why some places have high turnout and others don’t. If a county has low turnout and high unemployment, that might be part of the reason. It also helps find places doing better than expected. That way, the story can focus on what’s working and what’s not.
