@@ -10,13 +10,19 @@ install.packages("googlesheets4")
 library(googlesheets4)
 ```
 
-## Overview
+## Planned Analysis
 
-This project examines the relationship between team payroll and regular season wins in Major League Baseball from 2022 to 2024. Using data from Spotrac, I compiled regular season win totals and payroll figures for all 30 MLB teams across the three seasons.
+First, I will calculate descriptive statistics for both payroll and win totals across the three seasons. This will help summarize trends in the data and highlight whether certain years had higher or lower averages overall.
 
-The goal is to determine whether teams that spend more money tend to perform better during the regular season. I calculated descriptive statistics and ran linear regression models to explore the strength and consistency of the relationship between payroll and wins. I also included a visualization to highlight any patterns or outliers in the data.
+Second, I plan to use scatterplots and linear regression models to measure the relationship between payroll and wins. I’ll run a regression for each season and also consider combining all three years into a single model to see if the relationship holds over time. I’ll report the slope, intercept, and adjusted R-squared values to evaluate how strong the connection is.
 
-The notebook ends with a story pitch that outlines the key findings, potential limitations, and a plan for how to report the results as a data journalism piece.
+Third, I may use log transformation on payroll if the data is heavily skewed, which we’ve done before to improve linear model fit. I’ll check scatterplots and histograms to decide whether that’s necessary.
+
+Fourth, I plan to calculate correlations to support the regression models and compare how strong the payroll-win relationship is in different years. I may also explore residuals to identify outliers—teams that significantly overperformed or underperformed based on their payrolls.
+
+I also want to experiment with grouping teams into quartiles by payroll to compare average win totals in each spending group. This would let me see if there’s a clear difference in performance between low-spending and high-spending teams.
+
+Finally, if time allows, I may try a multiple regression using payroll and a dummy variable for the year to see whether the payroll-wins relationship changes over time. If I had more variables, I could do more here, but I’ll work with what I have.
 
 ## Task 1: Data Exploration
 
