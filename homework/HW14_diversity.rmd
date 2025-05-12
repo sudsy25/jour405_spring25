@@ -1,6 +1,6 @@
 ---
 title: "Diversity Index for Maryland Cities"
-author: "Your Name"
+author: "Andrew Diveley"
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +18,7 @@ A score of 0 indicates no diversity (everyone is the same race/ethnicity), while
 
 Run the following code to load the data, then examine it and describe what it contains. Based on the raw numbers alone, which cities stand out as diverse to you?
 
-**ANSWER HERE**
+There isn't any cities that truly stand out to me, but Silver Spring seems relatively diverse.
 
 ```{r load-data}
 md_cities <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/usat_diversity_index.csv")
@@ -60,7 +60,7 @@ md_cities <- md_cities |>
 
 The race probability is the sum the squared probabilities for each of the races. It represents the probability that two people randomly chosen from the same city will be of the same race. Which city has the highest race probability, and why do you think that is?
 
-**ANSWER HERE**
+Summerfield has the highest, and this is because it has the highest percentage of a single race (Black) than any other city.
 
 ```{r race-prob}
 md_cities <- md_cities |>
@@ -77,7 +77,7 @@ View(md_cities)
 
 Hispanic origin is not a race but an ethnicity or nationality – and a separate Census question. The probability someone is Hispanic or not Hispanic must be calculated separately from race, and Hisp_Prob is the probability that two randomly selected people will be Hispanic or not. That's an important distinction, because unlike race probability, this measures the likelihood of a binary question: that both random people will be Hispanic. What do you notice about the cities with the *lowest* Hisp_Prob scores?
 
-**ANSWER HERE**
+They have the most equal Hispanic and non-Hispanic  populations.
 
 ```{r ethnicity}
 md_cities <- md_cities |>
@@ -110,7 +110,7 @@ md_cities <- md_cities |>
 
 The final step is to calculate the probability that two people randomly chosen WILL NOT BE OF THE SAME RACE OR ETHNICITY. In other words, the highest index scores will be cities where those two random people will be from different backgrounds. Put simply, more diverse. Which cities are the top 3, and where are they located? Look at the bottom of the list - which city is the least diverse, and where is it?
 
-**ANSWER HERE**
+The top 3 diverse cities are Langley Park, Wheaton, and Adelphi.  They all fall around the D.C. area.  Lake Shore is the least diverse, and it along the west coast of the Chesapeake near Annapolis and the Bay Bridge.
 
 ```{r diversity-index}
 md_cities <- md_cities |>
@@ -126,4 +126,8 @@ View(md_cities)
 
 Given the data that you've produced here, write a headline and lede of the most interesting story from this exercise, and add below that details on how you would report it out: who you'd talk to and the questions you'd ask. When you describe the Diversity Index values, do so in a similar way to how USA Today did; the raw values themselves won't mean much to readers.
 
-**ANSWER HERE**
+Header: The Most Diverse Places in Maryland Are Just Outside D.C.
+
+Lede: In the Maryland suburbs of Washington, D.C., it’s more likely than not that any two people you pass on the street will come from different racial or ethnic backgrounds.
+
+I would interview local residents about the diversity of their neighborhoods, ask school officials about diversity in classes (languages spoken and if they have programs to help different students), and possibly go to Lake Shore and ask diversity questions there.
