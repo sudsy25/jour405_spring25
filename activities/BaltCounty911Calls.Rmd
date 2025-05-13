@@ -1,6 +1,6 @@
 ---
 title: "Baltimore County 911 Overdose Calls Analysis"
-author: "YOUR NAME HERE"
+author: "Andrew Diveley"
 ---
 
 ```{r setup, include=FALSE}
