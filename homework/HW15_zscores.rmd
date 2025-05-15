@@ -1,6 +1,6 @@
 ---
 title: "Finding Stories in Prince George's County Daily Accident Data"
-author: "YOUR NAME"
+author: "Andrew Diveley"
 ---
 
 ```{r setup, include=FALSE}
@@ -78,6 +78,8 @@ Looking at the time series visualization above, identify at least two noticeable
 
 ANSWER HERE
 
+The chart shows a sharp drop in daily accidents around March 2020, likely due to COVID-19 lockdowns. It also reveals a current decline since late 2024. These trends raise questions about how driving behavior in Prince George’s County has changed since the pandemic.
+
 The daily data is quite noisy, so let's also look at weekly patterns:
 
 ```{r weekly-patterns}
@@ -116,6 +118,8 @@ ggplot(accidents, aes(x = day_of_week, y = total)) +
 Based on the day-of-week analysis, which day(s) have the highest and lowest average accidents? Why might these patterns exist?
 
 ANSWER HERE
+
+Fridays and Saturdays have the highest average number of accidents, while Mondays have the lowest. This pattern likely reflects increased traffic and social activity on the weekends, compared to quieter roads earlier in the week.
 
 ## Calculating Z-Scores
 
@@ -163,6 +167,8 @@ unusual_days |>
 Choose one of the top 10 unusual days and research what might have happened on that date. Look for weather events, holidays, major incidents, or other factors that could explain the unusual number of accidents. Briefly describe your findings and how you would incorporate this context into a story.
 
 ANSWER HERE
+
+On October 29, 2021, there were 58 crashes in Prince George’s County — way more than usual. That day was the Friday before Halloween, a time when more people are out driving to parties or events. The high number of accidents could be tied to heavier traffic and possibly more risky driving. This could lead to a story about how holidays like Halloween affect road safety and what the county is doing to keep people safe.
 
 Let's visualize these unusual days:
 
@@ -212,6 +218,10 @@ unusual_dow |>
 Compare the days that have extreme z-scores overall versus those with extreme day-of-week z-scores. How do these lists differ? What journalistic insights can you draw from comparing these two different approaches to measuring "unusual" days?
 
 ANSWER HERE
+
+Some days, like October 29, 2021, were unusual no matter what. They had far more crashes than usual and were also high compared to other Fridays. Other days, like November 29, 2021, only stand out when you compare them to the same day of the week. Mondays usually have fewer crashes, so just one crash that day is more surprising than it first seems.
+
+Looking at both types of unusual days helps you find patterns that might be easy to miss. For example, a random Tuesday with a big jump in crashes might not seem unusual at first, but it could be if Tuesdays are usually quiet.
 
 Let's see how many unusual days we have for each day of the week:
 
@@ -292,6 +302,8 @@ Based on the monthly pattern analysis, which months have the highest and lowest 
 
 ANSWER HERE
 
+October has the highest average number of crashes, while January has the lowest. One possible reason is that October includes more events and has busier roads, especially with schools in session and holidays like Halloween. In contrast, January may have fewer drivers on the road due to winter weather, post-holiday slowdowns, or people staying home more. These seasonal trends could help reporters plan coverage around high-risk months.
+
 ## Identifying Extreme Outliers
 
 Let's look specifically at days with extremely unusual accident counts (z-scores beyond ±3):
@@ -317,7 +329,17 @@ For the extreme outliers identified (z-scores beyond ±3), what do they have in 
 
 ANSWER HERE
 
+Most of the extreme outliers happened on Fridays and Saturdays, which are already busy driving days. Many of them were also in the spring or around holidays, when people are more likely to be out on the roads. The lowest outliers, like November 29, 2021, and March 23, 2025, happened on slower days like Sunday or Monday. These patterns suggest that weekends and special dates are more likely to have traffic surges that lead to more accidents.
+
 ## Your Best Story Pitch
 
 ### Task 7 (5 points)
 Based on all the analyses performed, craft your best story pitch, including a headline and lede. Be sure to include what kinds of sources/people you'd talk to for the story.
+
+Headline:
+Why Crashes Spike on Weekends and Holidays in Prince George’s County
+
+Lede:
+Crash data shows that weekends, holidays and certain months bring sharp increases in accidents across Prince George’s County.
+
+To report this story, I’d talk to police officers who handle traffic, emergency responders who see the aftermath, and traffic safety experts who can explain why these patterns happen. I’d ask if they notice more crashes during certain times, what causes them, and what’s being done to keep drivers safe. I’d also look into whether special events, weather, or risky driving habits are behind the spikes.
