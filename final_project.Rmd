@@ -4,10 +4,12 @@ author: "Andrew Diveley"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 install.packages("googlesheets4")
 library(googlesheets4)
+library(corrplot)
+library(knitr)
+library(tidyr)
 ```
 
 ## Planned Analysis
@@ -22,9 +24,16 @@ Fourth, I plan to calculate correlations to support the regression models and co
 
 I also want to experiment with grouping teams into quartiles by payroll to compare average win totals in each spending group. This would let me see if there’s a clear difference in performance between low-spending and high-spending teams.
 
-Finally, if time allows, I may try a multiple regression using payroll and a dummy variable for the year to see whether the payroll-wins relationship changes over time. If I had more variables, I could do more here, but I’ll work with what I have.
+## Loading Data
 
-## Task 1: Data Exploration
+```{r load-data}
+mlb <- read_sheet("https://docs.google.com/spreadsheets/d/11bhOOC9QjHO-KDpsdtx7Veh8VaZYXTuSK1maateFKlI/edit?usp=sharing")
+
+head(mlb)
+colnames(mlb)
+```
+
+## Data Exploration
 
 My dataset includes regular season wins and team payrolls for all 30 MLB teams from 2022 to 2024. I got everything from Spotrac, which tracks how much each team spends on player salaries. Each team has win totals and payroll figures for each of the three seasons. The goal is to see if spending more money helps teams win more games.
 
@@ -36,9 +45,130 @@ One thing missing from the data is any context about why a team performed a cert
 
 I want to find out how strong the connection is between payroll and wins, and whether it changes from year to year. I also want to know if there are teams that keep doing better or worse than expected based on how much they spend. Finally, I want to see if there's a point where more spending stops helping as much.
 
-```{r load-data}
-mlb_data <- read_sheet("https://docs.google.com/spreadsheets/d/11bhOOC9QjHO-KDpsdtx7Veh8VaZYXTuSK1maateFKlI/edit?usp=sharing")
+## Descriptive Statistics
 
-# Preview structure
-View(mlb_data)
+The descriptive statistics show that while MLB teams' average win totals stayed consistent from 2022 to 2024 at around 81 wins per team, the variation in team performance slightly decreased each year. The standard deviation of wins dropped from 14.68 in 2022 to 12.47 in 2024, suggesting the league became more competitive with less difference between the best and worst teams. At the same time, average team payrolls increased steadily from about $149 million to nearly $169 million. The standard deviation in payroll remained high, showing a continued gap between the highest and lowest spenders. These patterns suggest that teams are spending more each year, but success on the field is spreading more evenly, making it worth exploring which teams are getting the most value for their payroll.
+
+```{r descriptive-stats}
+mlb_stats <- tibble(
+  Year = c(2022, 2023, 2024),
+  Avg_Wins = c(mean(mlb$Wins_2022), mean(mlb$Wins_2023), mean(mlb$Wins_2024)),
+  SD_Wins = c(sd(mlb$Wins_2022), sd(mlb$Wins_2023), sd(mlb$Wins_2024)),
+  Avg_Payroll = c(mean(mlb$Payroll_2022), mean(mlb$Payroll_2023), mean(mlb$Payroll_2024)),
+  SD_Payroll = c(sd(mlb$Payroll_2022), sd(mlb$Payroll_2023), sd(mlb$Payroll_2024))
+)
+
+mlb_stats
+
+library(knitr)
+mlb_stats %>% kable(digits = 2)
 ```
+
+## Scatterplots for each season
+
+The scatterplots show the relationship between team payroll and total wins for the 2022, 2023, and 2024 MLB seasons. In each year, teams with higher payrolls generally won more games, but the strength of that connection changed over time. In 2022, the trend was fairly strong, with a clear upward slope showing that teams with larger budgets tended to win more. In 2023, the pattern was weaker. The points were more scattered, and the line was flatter, meaning payroll had less impact on how many games a team won. In 2024, the relationship became stronger again, with the data points forming a clearer upward pattern. Overall, while spending more often helps, it does not always guarantee success, and some teams performed better or worse than expected based on their payroll.
+
+Several outliers stand out across the three scatterplots. In 2023, one team had a very low win total despite a high payroll, which suggests they underperformed significantly. This is likely the Mets, who spent among the most in the league but failed to win many games. In contrast, teams like the Orioles appear to have won a high number of games in both 2022 and 2023 while spending much less than the average, making them strong overperformers. In 2024, The White Sox clearly stand out, only amassing 41 wins in the season.
+
+```{r}
+ggplot(mlb, aes(x = Payroll_2022 / 1e6, y = Wins_2022)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  theme_minimal() +
+  labs(title = "Payroll vs Wins (2022)",
+       x = "Payroll (in millions)", y = "Wins")
+
+# 2023
+ggplot(mlb, aes(x = Payroll_2023 / 1e6, y = Wins_2023)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  theme_minimal() +
+  labs(title = "Payroll vs Wins (2023)",
+       x = "Payroll (in millions)", y = "Wins")
+
+# 2024
+ggplot(mlb, aes(x = Payroll_2024 / 1e6, y = Wins_2024)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  theme_minimal() +
+  labs(title = "Payroll vs Wins (2024)",
+       x = "Payroll (in millions)", y = "Wins")
+```
+
+## Quartiles and Z-Scores
+
+The payroll quartiles divide all 30 MLB teams into four equal groups based on how much money they spent on players.
+
+Quartile 1 includes the lowest-spending teams. These are the bottom 25 percent of payrolls, such as the Athletics, Pirates, and Royals.
+
+Quartile 2 includes teams just above the lowest group, spending more than Quartile 1 but still below the median.
+
+Quartile 3 includes moderately high spenders, like the Giants and Rangers.
+
+Quartile 4 includes the top 25 percent of teams in terms of payroll, such as the Mets, Yankees, and Dodgers.
+
+The z-scores show which MLB teams performed above or below the league average in wins for each season. In 2023, the Orioles had one of the highest z-scores at over 2.1, meaning they won far more games than most teams while spending significantly less than others. The Braves and Rays also had strong positive z-scores, showing that they consistently outperformed the league average. In contrast, the Athletics had a z-score below minus 2.3 in 2023, indicating one of the worst performances in the league that year. The Mets are another key example. They had one of the highest payrolls in 2023, but their win z-score was negative, meaning they underperformed despite their spending. In 2024, the White Sox had a win z-score of about minus 3.2, the lowest in the league, showing an even steeper drop in performance. Z-scores help show how unusual a team’s performance was compared to the rest of the league and reveal which teams got strong results or fell short regardless of their budget.
+
+```{r}
+mlb <- mlb %>%
+  mutate(
+    # Z-scores for wins
+    z_wins_2022 = (Wins_2022 - mean(Wins_2022)) / sd(Wins_2022),
+    z_wins_2023 = (Wins_2023 - mean(Wins_2023)) / sd(Wins_2023),
+    z_wins_2024 = (Wins_2024 - mean(Wins_2024)) / sd(Wins_2024),
+
+    # Z-scores for payroll
+    z_pay_2022 = (Payroll_2022 - mean(Payroll_2022)) / sd(Payroll_2022),
+    z_pay_2023 = (Payroll_2023 - mean(Payroll_2023)) / sd(Payroll_2023),
+    z_pay_2024 = (Payroll_2024 - mean(Payroll_2024)) / sd(Payroll_2024),
+
+    # Payroll quartiles
+    payroll_q_2022 = ntile(Payroll_2022, 4),
+    payroll_q_2023 = ntile(Payroll_2023, 4),
+    payroll_q_2024 = ntile(Payroll_2024, 4)
+  )
+
+mlb %>%
+  select(Team, starts_with("z_wins"), starts_with("payroll_q")) %>%
+  arrange(desc(z_wins_2023)) %>%
+  head(30)
+```
+
+## Win % by Payroll Quartile
+
+The boxplots show how many games each group of teams won based on how much money they spent. In 2022, teams that spent more were more likely to win more games. The highest spending teams had the highest average wins and the most consistent results. Teams with lower payrolls won fewer games and showed more ups and downs. In 2023, the pattern was not as clear. Some lower payroll teams won a lot, and some higher payroll teams did not do as well. In 2024, the highest spending teams again had the best results with the smallest range in performance. Teams in the middle spending group were the most unpredictable. Overall, spending more usually helps teams win, but some low-budget teams can still have great seasons.
+
+```{r}
+ggplot(mlb, aes(x = factor(payroll_q_2022), y = Wins_2022)) +
+  geom_boxplot(fill = "lightblue") +
+  theme_minimal() +
+  labs(title = "Wins by Payroll Quartile (2022)",
+       x = "Payroll Quartile",
+       y = "Wins")
+
+ggplot(mlb, aes(x = factor(payroll_q_2023), y = Wins_2023)) +
+  geom_boxplot(fill = "lightblue") +
+  theme_minimal() +
+  labs(title = "Wins by Payroll Quartile (2023)",
+       x = "Payroll Quartile",
+       y = "Wins")
+
+ggplot(mlb, aes(x = factor(payroll_q_2024), y = Wins_2024)) +
+  geom_boxplot(fill = "lightblue") +
+  theme_minimal() +
+  labs(title = "Wins by Payroll Quartile (2024)",
+       x = "Payroll Quartile",
+       y = "Wins")
+```
+
+
+
+
+
+
+
+
+
+
+
+
