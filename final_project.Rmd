@@ -161,14 +161,19 @@ ggplot(mlb, aes(x = factor(payroll_q_2024), y = Wins_2024)) +
        y = "Wins")
 ```
 
+## The Story
 
+Header:
+Does Money Win Games? What MLB Payroll Trends Reveal from 2022 to 2024.
 
+Lede:
+Teams that spend the most often win the most, but the past three MLB seasons show that payroll alone does not guarantee success.
 
+Findings:
+My analysis of payroll and win totals from 2022 to 2024 shows a positive relationship between team spending and performance. In 2022 and 2024, higher payroll teams clearly won more games on average, as seen in scatterplots, regression models, and boxplots by quartile. The relationship weakened in 2023, when several lower-payroll teams like the Orioles outperformed expectations, and high-spending teams like the Mets and Yankees fell short. Z-scores confirmed these outliers. On average, teams in the top spending quartile had higher win totals, but variation in each group shows that smart roster building still matters.
 
+Potential Problems:
+Some teams win despite low payrolls, and others spend heavily without results. These exceptions show that factors like player development, injuries, and front office strategy matter just as much as raw dollars. A few teams with similar payrolls performed very differently, suggesting that spending alone cannot explain every outcome.
 
-
-
-
-
-
-
+Reporting Plan:
+To report this story, I would interview team executives, financial analysts, and baseball operations staff to understand how they build rosters and evaluate success. I would ask why some high-payroll teams struggle and how low-payroll teams manage to win more. I would also include perspectives from players or managers on whether money affects team culture or expectations.This story would show fans and readers that money helps, but smart decision-making matters just as much.
