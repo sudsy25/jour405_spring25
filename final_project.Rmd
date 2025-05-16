@@ -161,6 +161,29 @@ ggplot(mlb, aes(x = factor(payroll_q_2024), y = Wins_2024)) +
        y = "Wins")
 ```
 
+## Linear Regression Models
+
+In 2022, the regression model shows that payroll was a strong predictor of team success. The adjusted R-squared was 0.33, meaning about 33 percent of the variation in team wins could be explained by how much they spent. The p-value for payroll was less than 0.001, which is statistically significant. This means the relationship between spending and performance was not due to chance. Teams that invested more in their payroll generally saw better results on the field. The positive slope confirms that higher payrolls were linked to more wins.
+
+In 2023, payroll had little to no relationship with team performance. The adjusted R-squared was slightly negative, which means the model did not explain any meaningful variation in wins. The p-value was 0.33, well above the usual cutoff for significance, showing that payroll was not a reliable factor in predicting wins that year. This suggests that other factors—such as trades, injuries, or team development—likely played a larger role in determining success. The 2023 season stands out as a year when money did not matter as much.
+
+In 2024, the model shows a moderate connection between payroll and wins. The adjusted R-squared was about 0.11, meaning payroll explained 11 percent of the variation in team wins. The p-value was 0.037, which makes the result statistically significant but not especially strong. The relationship was weaker than in 2022 but still present. Teams that spent more tended to win more games, but there were still some clear exceptions. This shows that payroll had an influence, but not a dominating one.
+
+```{r}
+# 2022
+model_2022 <- lm(Wins_2022 ~ Payroll_2022, data = mlb)
+summary(model_2022)
+
+# 2023
+model_2023 <- lm(Wins_2023 ~ Payroll_2023, data = mlb)
+summary(model_2023)
+
+# 2024
+model_2024 <- lm(Wins_2024 ~ Payroll_2024, data = mlb)
+summary(model_2024)
+```
+
+
 ## The Story
 
 Header:
